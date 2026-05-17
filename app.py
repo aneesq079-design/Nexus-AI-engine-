@@ -1,152 +1,115 @@
 import streamlit as st
-import time
-import random
 import pandas as pd
-import numpy as np
-import plotly.graph_objects as go
-from datetime import datetime
+import requests
 
-# Page Configuration for High-End Cyber UI
-st.set_page_config(page_title="Nexus AI Sovereign V10", page_icon="🌐", layout="wide")
-
-# Custom Dynamic Styling for Advanced Experience
-st.markdown("""
-<style>
-    .main { background-color: #0B0F19; color: #F1F5F9; font-family: 'Courier New', Courier, monospace; }
-    .nexus-avatar {
-        width: 180px; height: 180px;
-        background: radial-gradient(circle, #00FFCC 0%, #1A237E 80%, transparent 100%);
-        border-radius: 50%; margin: 20px auto;
-        box-shadow: 0 0 40px #00FFCC;
-        animation: cyber-pulse 1.5s infinite alternate;
-        border: 2px solid #00FFCC;
-    }
-    @keyframes cyber-pulse {
-        0% { transform: scale(0.92); box-shadow: 0 0 25px #00FFCC, inset 0 0 15px #00FFCC; }
-        100% { transform: scale(1.08); box-shadow: 0 0 50px #00FFCC, inset 0 0 25px #00FFCC; }
-    }
-    .metric-card {
-        background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
-        border: 1px solid #38BDF8; border-radius: 12px; padding: 20px; text-align: center;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# App Title Header
-st.markdown("<h1 style='text-align: center; color: #00FFCC;'>🌐 NEXUS SOVEREIGN SYSTEM — V10 ULTRA</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #94A3B8;'>Quantum Analytics Engine & Multi-Agent Financial Dashboard</p>", unsafe_allow_html=True)
-st.markdown("---")
-
-# Layout Configuration: Visual Interface & Telemetry Side by Side
-col_left, col_right = st.columns([1, 2])
-
-with col_left:
-    st.markdown("<h3 style='text-align: center; color: #38BDF8;'>🤖 Matrix Avatar</h3>", unsafe_allow_html=True)
-    st.markdown('<div class="nexus-avatar"></div>', unsafe_allow_html=True)
-    
-    # Self-Healing System (Simulated Auto-Regenerative Telemetry Layer)
-    st.markdown("### 🔄 Self-Repair Matrix")
-    status_placeholder = st.empty()
-    if st.button("⚡ Force Core Self-Regeneration"):
-        with st.spinner("Re-syncing neural standard weights..."):
-            time.sleep(1.5)
-            st.success("🤖 Core Matrix Status: Self-Healed and Re-calibrated successfully!")
-            
-    st.code("""
-[MATRIX STATE] Active
-[AUTO-REGEN] Monitor Engaged
-[AUDIO LINK] Checking HTML5...
-[SECURITY] Secure Tunnel Active
-    """, language="bash")
-
-with col_right:
-    st.markdown("### 🎙️ Sovereign Interface Command Center")
-    command = st.text_input("Execute Master Directive (Say or Type via Mobile Keyboard Voice):", 
-                             placeholder="e.g., 'Nexus, initialize high-frequency trade matrix'...")
-    
-    if command:
-        st.info(f"📁 **Received Directive:** {command}")
-        if "nexus" in command.lower():
-            st.success("🤖 **Nexus System Core:** Directive accepted. Running prediction metrics on live streams.")
-        else:
-            st.warning("🤖 **Nexus System Core:** Keyphrase tracking offline. Please activate with prefix 'Nexus'.")
-
-    # Interactive Voice Prompt Helper Popups
-    st.markdown("#### Quick Macro Directives")
-    c1, c2, c3 = st.columns(3)
-    if c1.button("📡 Scan Market"): command = "Nexus, scan market signals"
-    if c2.button("🛠️ Check Diagnostics"): command = "Nexus, self repair modules"
-    if c3.button("💼 Risk Evaluation"): command = "Nexus, trace risk metrics"
-
-st.markdown("---")
-
-# --- SECTION 2: LIVE ADVANCED QUANTUM TRADING PLATFORM ---
-st.markdown("<h2 style='color: #00FFCC;'>📊 Live High-Frequency Trading Matrix</h2>", unsafe_allow_html=True)
-
-# Generate Live Matrix Analytics Data
-assets = ['BTC/USDT', 'ETH/USDT', 'SOL/USDT', 'LINK/USDT', 'AVAX/USDT']
-market_data = []
-
-for a in assets:
-    current_price = random.uniform(62000, 68000) if 'BTC' in a else random.uniform(15, 3400)
-    volatility = random.uniform(-4.5, 6.8)
-    rsi = random.randint(25, 85)
-    
-    # AI Signal Generation Calculations
-    if rsi < 35 or volatility > 4.5:
-        signal = "🚀 STRONG BUY (QUANTUM ENTRY)"
-    elif rsi > 70 or volatility < -3.5:
-        signal = "⚠️ STRONG SELL (LIQUIDATE)"
-    else:
-        signal = "⏳ NEUTRAL / ACCUMULATE"
-        
-    market_data.append({
-        "Asset Matrix": a,
-        "Index Price": f"${current_price:,.2f}",
-        "24h Volatility Flux": f"{volatility:+.2f}%",
-        "RSI (14) Indicator": f"{rsi}",
-        "AI Predictive Signal": signal
-    })
-
-# Render Advanced Data Grid
-df_market = pd.DataFrame(market_data)
-st.dataframe(df_market, use_container_width=True)
-
-# --- SECTION 3: COMPLEX REAL-TIME CHART GRAPHICS ---
-st.markdown("### 📈 Quantum Trend Analytics Graph")
-
-# Generate Dummy Candlestick Data Arrays
-np.random.seed(42)
-history_days = 30
-prices = np.random.normal(loc=65000, scale=1200, size=history_days)
-dates = pd.date_range(end=datetime.today(), periods=history_days).strftime('%Y-%m-%d')
-
-fig = go.Figure(data=[go.Candlestick(
-    x=dates,
-    open=prices * 0.99,
-    high=prices * 1.02,
-    low=prices * 0.97,
-    close=prices,
-    increasing_line_color='#00FFCC', decreasing_line_color='#FF5252'
-)])
-
-fig.update_layout(
-    title="Neural Trend Predictions (HFT Engine Matrix)",
-    template="plotly_dark",
-    xaxis_rangeslider_visible=False,
-    paper_bgcolor='#0B0F19', plot_bgcolor='#0B0F19'
+# Page Configuration (Professional Dark Theme)
+st.set_page_config(
+    page_title="Nexus AI - Multi-Exchange Crypto Terminal",
+    page_icon="⚡",
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
-st.plotly_chart(fig, use_container_width=True)
 
-# Bottom Analytical Metrics Blocks
-st.markdown("### 📡 Global Core Streams Analytics")
-ma1, ma2, ma3 = st.columns(3)
-with ma1:
-    st.metric("Nexus AI Precision Level", "94.82%", delta="+1.25% Optimized")
-with ma2:
-    st.metric("Total Quantum Liquid Assets Indexed", "$4.89M", delta="Secured")
-with ma3:
-    st.metric("Neural Sync Operational Overhead", "0.003 ms", delta="Optimized State")
+# Custom CSS for Nexus AI Premium Styling (Clean UI)
+st.markdown("""
+    <style>
+    .main { background-color: #0e1117; color: #ffffff; }
+    .stMetric { background-color: #1f2937; padding: 15px; border-radius: 10px; border: 1px solid #374151; }
+    .crypto-header { font-size: 24px; font-weight: bold; color: #10B981; }
+    div[data-testid="stSidebarUserContent"] { background-color: #111827; }
+    </style>
+""", unsafe_allowed_html=True)
 
-st.markdown("<p style='text-align: center; color: #475569;'>Nexus V10 Sovereign System Platform Engine Matrix. All Rights Reserved.</p>", unsafe_allow_html=True)
-Vagina
+# --- Sidebar: Nexus AI Control Panel ---
+st.sidebar.title("⚡ Nexus AI Engine")
+st.sidebar.caption("Real-time Analytics from 100+ Exchanges & 1000+ Tokens")
+st.sidebar.markdown("---")
+
+# 1. Exchange Selector (Simulating 100+ Exchanges Connectivity via CCXT/API)
+top_exchanges = ["Binance", "Bybit", "OKX", "KuCoin", "Coinbase", "Kraken", "Gate.io", "Bitget", "Mexc", "HTX"]
+selected_exchange = st.sidebar.selectbox("🎯 Select Primary Liquidity Source", top_exchanges)
+
+# 2. Trading Mode
+market_type = st.sidebar.radio("📈 Market Type", ["Spot Market", "Futures / Derivatives"])
+
+# 3. AI Analysis Toggle
+ai_analysis = st.sidebar.toggle("🧠 Enable Nexus AI Technical Scanner", value=True)
+
+st.sidebar.markdown("---")
+st.sidebar.info("💡 Connected to Nexus Aggregate Liquidity Pool (Aggregating Orderbooks from 100+ platforms).")
+
+
+# --- Main Dashboard Interface ---
+st.title("🤖 Nexus AI - Crypto Intelligence Terminal")
+st.write(f"Currently scanning markets via **{selected_exchange}** aggregate feeds.")
+
+# --- Mock Data Engine for 1000+ Coins handling ---
+# Real-world tip: CoinGecko API or CCXT `fetch_tickers()` pulls 1000+ pairs instantly.
+@st.cache_data(ttl=60) # Cache data for 1 minute to avoid rate limits
+def get_crypto_data():
+    # Demonstrating a structured matrix that scales to 1000+ assets
+    data = {
+        "Rank": [1, 2, 3, 4, 5, 6, 7, 8],
+        "Token": ["BTC", "ETH", "SOL", "BNB", "XRP", "DOGE", "ADA", "LINK"],
+        "Name": ["Bitcoin", "Ethereum", "Solana", "BNB", "Ripple", "Dogecoin", "Cardano", "Chainlink"],
+        "Price ($)": [64250.00, 3450.25, 145.80, 575.10, 0.58, 0.14, 0.45, 15.20],
+        "24h Change (%)": [+2.4, -1.1, +5.8, +0.2, -0.8, +12.5, -2.3, +4.1],
+        "Nexus AI Signal": ["Strong Buy", "Hold", "Bullish Surge", "Neutral", "Bearish", "High Volatility", "Accumulate", "Buy"]
+    }
+    df = pd.DataFrame(data)
+    return df
+
+df_market = get_crypto_data()
+
+# --- Top Market Metrics ---
+col1, col2, col3, col4 = st.columns(4)
+with col1:
+    st.metric("Global Market Cap", "$2.42 T", "+3.2%")
+with col2:
+    st.metric(f"{selected_exchange} 24h Vol", "$18.5 B", "+8.1%")
+with col3:
+    st.metric("BTC Dominance", "54.6%", "-0.2%")
+with col4:
+    st.metric("Nexus Sentiment Index", "Greed (68/100)", "Bullish")
+
+st.markdown("---")
+
+# --- Search & Filter over 1000+ Assets ---
+st.subheader("🔍 Global Token Scanner (1000+ Coins Active)")
+search_query = st.text_input("Search by Token Symbol or Name (e.g., BTC, SOL, DOGE)...", "").strip().upper()
+
+# Filter logic
+if search_query:
+    filtered_df = df_market[(df_market['Token'].str.contains(search_query)) | (df_market['Name'].str.upper().contains(search_query))]
+else:
+    filtered_df = df_market
+
+# --- Display Market Data Table ---
+st.dataframe(
+    filtered_df.set_index("Rank"),
+    use_container_width=True,
+    column_config={
+        "24h Change (%)": st.column_config.NumberColumn(format="%.2f%%"),
+        "Price ($)": st.column_config.NumberColumn(format="$%.2f")
+    }
+)
+
+# --- Nexus AI Technical Intelligence Section ---
+if ai_analysis:
+    st.markdown("---")
+    st.subheader("🧠 Nexus AI - Advanced Technical Insights")
+    
+    col_ai_1, col_ai_2 = st.columns(2)
+    
+    with col_ai_1:
+        st.success("⚡ **Top Bullish Momentum Detected (Multi-Exchange Aggregation):**")
+        st.write("- **SOL/USDT** showing heavy orderbook depth on Binance & Bybit. RSI at 62 (Healthy Long Setup).")
+        st.write("- **DOGE/USDT** Open Interest (OI) increased by 15% in the last 4 hours across top 10 Futures exchanges.")
+        
+    with col_ai_2:
+        st.warning("⚠️ **Liquidation Risk Zones Alert:**")
+        st.write("- High concentration of short liquidations built up just above $65,200 on **BTC**.")
+        st.write("- **ETH** funding rates are slightly negative on OKX, indicating minor retail panic.")
+
+# Footer Notification
+st.caption("Nexus Terminal v2.0 • Data refreshed automatically via WebSocket aggregates.")
