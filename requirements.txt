@@ -1,5 +1,4 @@
 streamlit
-websockets
 pandas
-numpy
-plotly
+requests
+beautifulsoup4
