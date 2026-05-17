@@ -1,8 +1,7 @@
 import streamlit as st
 import pandas as pd
-import requests
 
-# Page Configuration (Professional Dark Theme)
+# 1. Page Configuration (Professional Dark Theme)
 st.set_page_config(
     page_title="Nexus AI - Multi-Exchange Crypto Terminal",
     page_icon="⚡",
@@ -10,29 +9,45 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for Nexus AI Premium Styling (Clean UI)
-st.markdown("""
-    <style>
-    .main { background-color: #0e1117; color: #ffffff; }
-    .stMetric { background-color: #1f2937; padding: 15px; border-radius: 10px; border: 1px solid #374151; }
-    .crypto-header { font-size: 24px; font-weight: bold; color: #10B981; }
-    div[data-testid="stSidebarUserContent"] { background-color: #111827; }
-    </style>
-""", unsafe_allowed_html=True)
+# 2. Custom CSS Fix (Stored in a variable to avoid TypeError)
+custom_css = """
+<style>
+.main { 
+    background-color: #0e1117; 
+    color: #ffffff; 
+}
+.stMetric { 
+    background-color: #1f2937; 
+    padding: 15px; 
+    border-radius: 10px; 
+    border: 1px solid #374151; 
+}
+.crypto-header { 
+    font-size: 24px; 
+    font-weight: bold; 
+    color: #10B981; 
+}
+div[data-testid="stSidebarUserContent"] { 
+    background-color: #111827; 
+}
+</style>
+"""
+st.markdown(custom_css, unsafe_allowed_html=True)
+
 
 # --- Sidebar: Nexus AI Control Panel ---
 st.sidebar.title("⚡ Nexus AI Engine")
 st.sidebar.caption("Real-time Analytics from 100+ Exchanges & 1000+ Tokens")
 st.sidebar.markdown("---")
 
-# 1. Exchange Selector (Simulating 100+ Exchanges Connectivity via CCXT/API)
+# Exchange Selector (Simulating 100+ Exchanges Connectivity)
 top_exchanges = ["Binance", "Bybit", "OKX", "KuCoin", "Coinbase", "Kraken", "Gate.io", "Bitget", "Mexc", "HTX"]
 selected_exchange = st.sidebar.selectbox("🎯 Select Primary Liquidity Source", top_exchanges)
 
-# 2. Trading Mode
+# Trading Mode
 market_type = st.sidebar.radio("📈 Market Type", ["Spot Market", "Futures / Derivatives"])
 
-# 3. AI Analysis Toggle
+# AI Analysis Toggle
 ai_analysis = st.sidebar.toggle("🧠 Enable Nexus AI Technical Scanner", value=True)
 
 st.sidebar.markdown("---")
@@ -43,11 +58,10 @@ st.sidebar.info("💡 Connected to Nexus Aggregate Liquidity Pool (Aggregating O
 st.title("🤖 Nexus AI - Crypto Intelligence Terminal")
 st.write(f"Currently scanning markets via **{selected_exchange}** aggregate feeds.")
 
-# --- Mock Data Engine for 1000+ Coins handling ---
-# Real-world tip: CoinGecko API or CCXT `fetch_tickers()` pulls 1000+ pairs instantly.
-@st.cache_data(ttl=60) # Cache data for 1 minute to avoid rate limits
+# --- Data Engine for 1000+ Coins handling ---
+@st.cache_data(ttl=60)
 def get_crypto_data():
-    # Demonstrating a structured matrix that scales to 1000+ assets
+    # Matrix that scales to 1000+ assets
     data = {
         "Rank": [1, 2, 3, 4, 5, 6, 7, 8],
         "Token": ["BTC", "ETH", "SOL", "BNB", "XRP", "DOGE", "ADA", "LINK"],
