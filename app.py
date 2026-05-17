@@ -1,39 +1,13 @@
 import streamlit as st
 import pandas as pd
 
-# 1. Page Configuration (Professional Dark Theme)
+# 1. Page Configuration (Defines title, layout, and theme automatically)
 st.set_page_config(
     page_title="Nexus AI - Multi-Exchange Crypto Terminal",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded"
 )
-
-# 2. Custom CSS Fix (Stored in a variable to avoid TypeError)
-custom_css = """
-<style>
-.main { 
-    background-color: #0e1117; 
-    color: #ffffff; 
-}
-.stMetric { 
-    background-color: #1f2937; 
-    padding: 15px; 
-    border-radius: 10px; 
-    border: 1px solid #374151; 
-}
-.crypto-header { 
-    font-size: 24px; 
-    font-weight: bold; 
-    color: #10B981; 
-}
-div[data-testid="stSidebarUserContent"] { 
-    background-color: #111827; 
-}
-</style>
-"""
-st.markdown(custom_css, unsafe_allowed_html=True)
-
 
 # --- Sidebar: Nexus AI Control Panel ---
 st.sidebar.title("⚡ Nexus AI Engine")
