@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-# 1. Page Configuration (Defines title, layout, and theme automatically)
+# 1. Page Configuration
 st.set_page_config(
     page_title="Nexus AI - Multi-Exchange Crypto Terminal",
     page_icon="⚡",
@@ -14,14 +14,10 @@ st.sidebar.title("⚡ Nexus AI Engine")
 st.sidebar.caption("Real-time Analytics from 100+ Exchanges & 1000+ Tokens")
 st.sidebar.markdown("---")
 
-# Exchange Selector (Simulating 100+ Exchanges Connectivity)
 top_exchanges = ["Binance", "Bybit", "OKX", "KuCoin", "Coinbase", "Kraken", "Gate.io", "Bitget", "Mexc", "HTX"]
 selected_exchange = st.sidebar.selectbox("🎯 Select Primary Liquidity Source", top_exchanges)
 
-# Trading Mode
 market_type = st.sidebar.radio("📈 Market Type", ["Spot Market", "Futures / Derivatives"])
-
-# AI Analysis Toggle
 ai_analysis = st.sidebar.toggle("🧠 Enable Nexus AI Technical Scanner", value=True)
 
 st.sidebar.markdown("---")
@@ -32,16 +28,15 @@ st.sidebar.info("💡 Connected to Nexus Aggregate Liquidity Pool (Aggregating O
 st.title("🤖 Nexus AI - Crypto Intelligence Terminal")
 st.write(f"Currently scanning markets via **{selected_exchange}** aggregate feeds.")
 
-# --- Data Engine for 1000+ Coins handling ---
+# --- Data Engine for 1000+ Coins ---
 @st.cache_data(ttl=60)
 def get_crypto_data():
-    # Matrix that scales to 1000+ assets
     data = {
         "Rank": [1, 2, 3, 4, 5, 6, 7, 8],
         "Token": ["BTC", "ETH", "SOL", "BNB", "XRP", "DOGE", "ADA", "LINK"],
         "Name": ["Bitcoin", "Ethereum", "Solana", "BNB", "Ripple", "Dogecoin", "Cardano", "Chainlink"],
         "Price ($)": [64250.00, 3450.25, 145.80, 575.10, 0.58, 0.14, 0.45, 15.20],
-        "24h Change (%)": [+2.4, -1.1, +5.8, +0.2, -0.8, +12.5, -2.3, +4.1],
+        "24h Change (%)": [2.4, -1.1, 5.8, 0.2, -0.8, 12.5, -2.3, 4.1],
         "Nexus AI Signal": ["Strong Buy", "Hold", "Bullish Surge", "Neutral", "Bearish", "High Volatility", "Accumulate", "Buy"]
     }
     df = pd.DataFrame(data)
@@ -64,23 +59,29 @@ st.markdown("---")
 
 # --- Search & Filter over 1000+ Assets ---
 st.subheader("🔍 Global Token Scanner (1000+ Coins Active)")
-search_query = st.text_input("Search by Token Symbol or Name (e.g., BTC, SOL, DOGE)...", "").strip().upper()
+search_query = st.text_input("Search by Token Symbol or Name (e.g., BTC, SOL, DOGE)...", "").strip()
 
-# Filter logic
+# SAFE FILTER LOGIC: कन्वर्ट डेटा टू स्ट्रिंग पहले ताकि कोई एरर न आये
 if search_query:
-    filtered_df = df_market[(df_market['Token'].str.contains(search_query)) | (df_market['Name'].str.upper().contains(search_query))]
+    # दोनों कॉलम को सुरक्षित तरीके से स्ट्रिंग में बदल कर मैच कर रहे हैं
+    token_match = df_market['Token'].astype(str).str.contains(search_query, case=False, na=False)
+    name_match = df_market['Name'].astype(str).str.contains(search_query, case=False, na=False)
+    filtered_df = df_market[token_match | name_match]
 else:
     filtered_df = df_market
 
 # --- Display Market Data Table ---
-st.dataframe(
-    filtered_df.set_index("Rank"),
-    use_container_width=True,
-    column_config={
-        "24h Change (%)": st.column_config.NumberColumn(format="%.2f%%"),
-        "Price ($)": st.column_config.NumberColumn(format="$%.2f")
-    }
-)
+if not filtered_df.empty:
+    st.dataframe(
+        filtered_df.set_index("Rank"),
+        use_container_width=True,
+        column_config={
+            "24h Change (%)": st.column_config.NumberColumn(format="%.2f%%"),
+            "Price ($)": st.column_config.NumberColumn(format="$%.2f")
+        }
+    )
+else:
+    st.warning("🔍 No tokens found matching your search query.")
 
 # --- Nexus AI Technical Intelligence Section ---
 if ai_analysis:
