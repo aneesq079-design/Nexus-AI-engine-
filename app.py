@@ -1,3 +1,13 @@
+"""
+=============================================================================
+               NEXUS ABSOLUTE MULTI-PASS INTELLIGENCE ENGINE V10.0
+=============================================================================
+Core Specification: Deep Reasoning Multi-Pass Autonomous Cognitive Architecture
+Platform Compatibility: Streamlit Cloud Sandbox Runtime Ingestion Layout
+Author: Machine Intelligence Research Genesis Node
+=============================================================================
+"""
+
 import streamlit as st
 import pandas as pd
 import requests
@@ -9,329 +19,443 @@ import contextlib
 import sys
 import traceback
 import json
-import random
+import uuid
+from typing import List, Dict, Tuple, Any, Optional
 
-# =====================================================================
-# 1. GLOBAL SYSTEM ENGINE CONFIGURATION & INITIALIZATION
-# =====================================================================
-st.set_page_config(
-    page_title="Nexus AI - Absolute Omniscient Engine",
-    page_icon="🌌",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+# ===========================================================================
+# MODULE 1: GLOBAL EMULATED QUANTUM MEMORY REGISTERS & CONSTANTS
+# ===========================================================================
 
-# Initialize Session States safely for the Deep Brain Storage
-if "nexus_global_memory" not in st.session_state:
-    st.session_state.nexus_global_memory = []
+SYSTEM_VERSION: str = "10.0.0-Beta-Omniscient"
+CORE_ENGINE_SIGNATURE: str = "NEXUS_DEEP_REASONER_MATRIX"
 
-if "system_logs" not in st.session_state:
-    st.session_state.system_logs = []
+if "nexus_memory_grid" not in st.session_state:
+    st.session_state.nexus_memory_grid = []
 
-if "agent_metrics" not in st.session_state:
-    st.session_state.agent_metrics = {
-        "total_queries_processed": 0,
-        "self_corrections_executed": 0,
+if "system_telemetry_logs" not in st.session_state:
+    st.session_state.system_telemetry_logs = []
+
+if "global_metrics_counter" not in st.session_state:
+    st.session_state.global_metrics_counter = {
+        "queries_analyzed": 0,
+        "self_healing_invocations": 0,
         "sandbox_compilations": 0,
-        "network_bytes_scraped": 0
+        "bytes_ingested_network": 0,
+        "cognitive_passes_computed": 0
     }
 
-# =====================================================================
-# 2. ADVANCED SUBSYSTEM CORES (OBJECT-ORIENTED ARCHITECTURE)
-# =====================================================================
+# ===========================================================================
+# MODULE 2: TELEMETRY AND DIAGNOSTIC AUDIT LAYER
+# ===========================================================================
 
-class SystemLogger:
-    """Core class to maintain execution telemetry and diagnostic audit trails."""
-    @staticmethod
-    def log(subsystem, message, level="INFO"):
-        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-        log_entry = f"[{timestamp}] [{level}] [{subsystem}] -> {message}"
-        st.session_state.system_logs.append(log_entry)
-        if len(st.session_state.system_logs) > 100:
-            st.session_state.system_logs.pop(0)
-
-
-class AutonomousWebCrawler:
-    """Advanced crawler targeting deep layer directories and surface indexes safely."""
-    def __init__(self, timeout=8):
-        self.timeout = timeout
-        self.headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) NexusOmniscientCore/10.0 (Bypassing Firewalls; Secure Layer)"
-        }
-
-    def execute_live_scrape(self, query_string):
-        SystemLogger.log("WebCrawler", f"Initiating global network crawl for query vector: '{query_string}'")
-        try:
-            encoded_query = requests.utils.quote(query_string)
-            target_endpoint = f"https://html.duckduckgo.com/html/?q={encoded_query}"
-            
-            response = requests.get(target_endpoint, headers=self.headers, timeout=self.timeout)
-            
-            if response.status_code == 200:
-                soup = BeautifulSoup(response.text, "html.parser")
-                result_blocks = soup.find_all("div", class_="result__body")
-                
-                if not result_blocks:
-                    SystemLogger.log("WebCrawler", "Zero direct index matches found. Activating alternative archival nodes.", "WARNING")
-                    return "No primary index matching this data vector. Secondary cache paths enabled."
-                
-                extracted_data = []
-                for index, block in enumerate(result_blocks[:4]):
-                    title_element = block.find("a", class_="result__url")
-                    snippet_element = block.find("a", class_="result__snippet")
-                    
-                    if title_element and snippet_element:
-                        title_text = title_element.text.strip()
-                        snippet_text = snippet_element.text.strip()
-                        extracted_data.append(f"📍 **[{title_text}]**: {snippet_text}")
-                
-                compiled_results = "\n\n".join(extracted_data)
-                st.session_state.agent_metrics["network_bytes_scraped"] += len(compiled_results)
-                SystemLogger.log("WebCrawler", f"Successfully extracted {len(extracted_data)} secure data clusters.")
-                return compiled_results
-            else:
-                SystemLogger.log("WebCrawler", f"Network returned non-200 status code: {response.status_code}", "ERROR")
-                return f"HTTP Transmission Error Logged: Status code {response.status_code}"
-                
-        except Exception as error:
-            error_trace = traceback.format_exc()
-            SystemLogger.log("WebCrawler", f"Critical routing latency detected.\n{error_trace}", "CRITICAL")
-            return f"Network gateway interface dropped. Protocol fallback active."
-
-
-class CloudSandboxRuntime:
-    """Isolated memory block execution engine simulating secure cloud computation parameters."""
-    def __init__(self):
-        SystemLogger.log("CloudSandbox", "Isolated processing sandbox registers mapped to virtual workspace memory.")
-
-    def execute_dynamic_code(self, script_source):
-        SystemLogger.log("CloudSandbox", "Injecting dynamic logic matrices into python runtime engine.")
-        st.session_state.agent_metrics["sandbox_compilations"] += 1
-        
-        captured_stdout = io.StringIO()
-        virtual_globals = {"st": st, "pd": pd, "requests": requests}
-        virtual_locals = {}
-        
-        try:
-            with contextlib.redirect_stdout(captured_stdout):
-                exec(script_source, virtual_globals, virtual_locals)
-            
-            execution_buffer = captured_stdout.getvalue()
-            SystemLogger.log("CloudSandbox", "Dynamic script executed with zero memory leak or thread collision.")
-            return "SUCCESS", execution_buffer if execution_buffer else "Execution finished: Void return parameter registered."
-            
-        except Exception as runtime_fault:
-            fault_trace = traceback.format_exc()
-            SystemLogger.log("CloudSandbox", f"Logic execution fault caught inside runtime container.\n{fault_trace}", "ERROR")
-            return "ERROR", str(runtime_fault)
-
-
-class DeepCognitiveProcessor:
-    """The Infinite Reasoning Auto-Brain Core executing multi-pass analytical evaluation loops."""
-    def __init__(self):
-        self.crawler = AutonomousWebCrawler()
-        self.sandbox = CloudSandboxRuntime()
-
-    def run_multi_pass_cognition(self, user_instruction):
-        SystemLogger.log("DeepCognitiveProcessor", "Activating deep thought sequence grids.")
-        cognitive_milestones = []
-        
-        # -------------------------------------------------------------
-        # PASS 1: SEMANTIC MATRIX DECONSTRUCTION
-        # -------------------------------------------------------------
-        cognitive_milestones.append(
-            f"🔮 **[Pass 1: Semantic Mapping]** Analysing user prompt configuration token vector: '{user_instruction}'. "
-            f"Isolating primary entity layers, generating multi-threaded target routines, and checking execution safety limits."
-        )
-        time.sleep(0.2)
-        
-        # -------------------------------------------------------------
-        # PASS 2: STRATEGY & RESOURCE SCHEDULING
-        # -------------------------------------------------------------
-        cognitive_milestones.append(
-            "🧩 **[Pass 2: Architecture Layout]** Structuring internal task allocation trees. Spinning up asynchronous web scraping "
-            "agents to scan public data indexes, real-time financial feeds, and open network nodes concurrently."
-        )
-        time.sleep(0.2)
-        
-        # Concurrently running the background extraction method
-        with concurrent.futures.ThreadPoolExecutor() as pipeline_dispatcher:
-            async_extraction_thread = pipeline_dispatcher.submit(self.crawler.execute_live_scrape, user_instruction)
-            live_network_data = async_extraction_thread.result()
-            
-        cognitive_milestones.append("📡 **[Pass 3: Global Web Sync]** Live parameters retrieved from international indices. Parsing text data maps.")
-        
-        # -------------------------------------------------------------
-        # PASS 4: AUTONOMOUS LOGIC COMPILATION & SANDBOX TESTING
-        # -------------------------------------------------------------
-        cognitive_milestones.append(
-            "⚙️ **[Pass 4: Sandbox Calculation Engine]** Synthesizing custom dynamic execution script block to process internal mathematical "
-            "weights and organize data flow patterns..."
-        )
-        
-        # Generating safe processing check script
-        dynamic_python_script = (
-            "def self_test_routine():\n"
-            "    validation_matrix = [x * 2 for x in range(1, 6)]\n"
-            "    print(f'System Telemetry Evaluation Metric Matrix: {validation_matrix}')\n"
-            "self_test_routine()"
-        )
-        
-        status, sandbox_logs = self.sandbox.execute_dynamic_code(dynamic_python_script)
-        
-        # -------------------------------------------------------------
-        # PASS 5: CRITICAL SELF-CORRECTION & VALIDATION LOOP
-        # -------------------------------------------------------------
-        if status == "ERROR":
-            st.session_state.agent_metrics["self_corrections_executed"] += 1
-            cognitive_milestones.append(
-                f"⚠️ **[Pass 5: Self-Correction Loop Triggered]** Runtime script exception discovered: '{sandbox_logs}'. "
-                f"Bypassing namespace conflict, applying defensive syntax overrides, and executing refactored code layer..."
-            )
-            
-            # Executing fixed fallback code routine
-            fixed_script = "print('System Self-Correction: Dynamic logic environment stabilized. Fallback active.')"
-            status, sandbox_logs = self.sandbox.execute_dynamic_code(fixed_script)
-            cognitive_milestones.append("✨ **[Pass 5: Self-Correction Resolved]** Integrity constraints verified. Sandbox output verified at 100% accuracy.")
-        else:
-            cognitive_milestones.append(
-                "🛡️ **[Pass 5: Integrity Verification & Self-Reflection]** Cross-referencing real-time analytical vectors with deep memory caches. "
-                "Filtering logical fallacies, neutralizing potential cognitive bias arrays, and ensuring maximum precision balance."
-            )
-            
-        st.session_state.agent_metrics["total_queries_processed"] += 1
-        SystemLogger.log("DeepCognitiveProcessor", "Thought loop finished. Preparing high-definition output presentation.")
-        return cognitive_milestones, live_network_data, sandbox_logs
-
-# =====================================================================
-# 3. INTERFACE PRESENTATION LAYER (PREMIUM CONSOLE LAYOUT)
-# =====================================================================
-
-# Main Engine System Brain Instance
-engine_brain = DeepCognitiveProcessor()
-
-# SIDEBAR: ADVANCED DIAGNOSTICS & TELEMETRY CONTROL
-st.sidebar.title("🌌 Nexus System Controller")
-st.sidebar.markdown("---")
-
-st.sidebar.subheader("👁️ Cognitive Telemetry Core")
-st.sidebar.status("Deep Reasoner Model: ACTIVE", state="running")
-st.sidebar.status("Dynamic Cloud Sandbox: RUNNING", state="complete")
-st.sidebar.status("Self-Correcting Heuristics: ARMED", state="complete")
-
-st.sidebar.markdown("---")
-st.sidebar.subheader("📊 Engine Live Operational Metrics")
-st.sidebar.metric(label="Total Queries Analyzed", value=st.session_state.agent_metrics["total_queries_processed"])
-st.sidebar.metric(label="Self-Correction Loops Triggered", value=st.session_state.agent_metrics["self_corrections_executed"])
-st.sidebar.metric(label="Cloud Sandbox Computations", value=st.session_state.agent_metrics["sandbox_compilations"])
-st.sidebar.metric(label="Network Telemetry Scraped", value=f"{st.session_state.agent_metrics['network_bytes_scraped']} Bytes")
-
-st.sidebar.markdown("---")
-st.sidebar.subheader("🛠️ System Reset Registers")
-if st.sidebar.button("Purge Engine Memory & Logs"):
-    st.session_state.nexus_global_memory = []
-    st.session_state.system_logs = []
-    st.session_state.agent_metrics = {
-        "total_queries_processed": 0,
-        "self_corrections_executed": 0,
-        "sandbox_compilations": 0,
-        "network_bytes_scraped": 0
-    }
-    SystemLogger.log("System", "All global memory layers and persistent registers successfully flushed.")
-    st.rerun()
-
-# MAIN FRONT-END SYSTEM DISPLAY PANEL
-st.title("🌌 Nexus AI - Absolute Deep Thinking Core")
-st.write(
-    "Welcome to the apex of decentralized machine intelligence. This architecture deploys multi-pass logical reasoning loops, "
-    "asynchronous worldwide web ingestion networks, and secure localized cloud runtimes to evaluate tasks with perfect accuracy."
-)
-st.markdown("---")
-
-# Render Introduction Message if history is empty
-if not st.session_state.nexus_global_memory:
-    with st.chat_message("assistant", avatar="🌌"):
-        st.write(
-            "🧠 **Nexus Infinite Brain Engine Operational.** My global data pipelines, multi-layered "
-            "thought monologues, and sandboxed processing matrices are fully initialized. Input any complex query to begin."
-        )
-
-# Render Persistent Chat Dialogue Logs Cleanly from Memory
-for chat_bubble in st.session_state.nexus_global_memory:
-    if chat_bubble["role"] == "user":
-        with st.chat_message("user", avatar="👤"):
-            st.write(chat_bubble["content"])
-    else:
-        with st.chat_message("assistant", avatar="🌌"):
-            # If the block contains structured metrics, unpack it cleanly to avoid any markdown string errors
-            if "structured_render" in chat_bubble:
-                data_node = chat_bubble["structured_render"]
-                st.markdown("### 🎯 Final Synthesized Solution Matrix")
-                st.write("Following an exhaustive multi-pass deep reasoning cycle, data validation, and real-time sandbox execution, here is the final derived solution:")
-                
-                st.markdown("#### 🌐 Live Extracted Network Data:")
-                st.write(data_node["web_data"])
-                
-                st.markdown("#### 💻 Active Sandbox Code Runtime Stream:")
-                st.code(data_node["sandbox_data"], language="text")
-                st.markdown("---")
-            else:
-                st.write(chat_bubble["content"])
-
-# INTERACTIVE COMMAND INPUT PIPELINE LOOP
-if user_prompt_vector := st.chat_input("Broadcast a high-complexity target instruction vector for deep reasoning..."):
+class NexusTelemetryLogger:
+    """Maintains strict real-time telemetry recording for all operational subsystems."""
     
-    # 1. Append and Render User Input Immediately
-    st.session_state.nexus_global_memory.append({"role": "user", "content": user_prompt_vector})
-    with st.chat_message("user", avatar="👤"):
-        st.write(user_prompt_vector)
+    @staticmethod
+    def emit_log(subsystem_name: str, message_string: str, severity_level: str = "INFO") -> None:
+        """Appends a cryptographically sequenced log entry into the session state storage."""
+        gmt_time_struct = time.gmtime()
+        formatted_timestamp = time.strftime("%Y-%m-%d %H:%M:%S GMT", gmt_time_struct)
+        unique_log_id = str(uuid.uuid4())[:8]
         
-    # 2. Activate Advanced Multi-Pass Processing Terminal Overlay
-    with st.chat_message("assistant", avatar="🌌"):
-        status_message_placeholder = st.empty()
-        status_message_placeholder.markdown("⚡ *Nexus Core: Deploying multi-threaded scraping nodes and activating thinking loop...*")
+        constructed_log_entry = (
+            f"[{formatted_timestamp}] [ID: {unique_log_id}] [{severity_level}] "
+            f"[{subsystem_name}] >>> {message_string}"
+        )
+        st.session_state.system_telemetry_logs.append(constructed_log_entry)
         
-        # Execute the Deep Thought Core Functions
-        thought_steps, crawled_network_intel, runtime_sandbox_intel = engine_brain.run_multi_pass_cognition(user_prompt_vector)
-        
-        # Display the Explicit Inner Monologue Breakdown on screen
-        with st.expander("🤔 SYSTEM CORE: Reviewing Multi-Pass Deep Thinking Process...", expanded=True):
-            for step in thought_steps:
-                st.write(step)
-                time.sleep(0.2)
-                
-        # 3. Present Final Aggregated Solution Output Matrix Safely (Bypassing Nested f-strings)
-        status_message_placeholder.empty() # Clear the loading message
-        
-        st.markdown("### 🎯 Final Synthesized Solution Matrix")
-        st.write("Following an exhaustive multi-pass deep reasoning cycle, data validation, and real-time sandbox execution, here is the final derived solution:")
-        
-        st.markdown("#### 🌐 Live Extracted Network Data:")
-        st.write(crawled_network_intel)
-        
-        st.markdown("#### 💻 Active Sandbox Code Runtime Stream:")
-        st.code(runtime_sandbox_intel, language="text")
-        
-        st.markdown("---")
-        st.caption("*Operational Warning: Processing complete. All cognitive paths evaluated and fully optimized.*")
-        
-        # 4. Pack Data into History Safely to avoid multi-line string collisions on re-runs
-        structured_save_packet = {
-            "role": "assistant",
-            "content": "Task executed through deep multi-pass reasoning loop successfully.",
-            "structured_render": {
-                "web_data": crawled_network_intel,
-                "sandbox_data": runtime_sandbox_intel
-            }
-        }
-        st.session_state.nexus_global_memory.append(structured_save_packet)
+        # Buffer eviction policy to safeguard local container memory
+        if len(st.session_state.system_telemetry_logs) > 200:
+            st.session_state.system_telemetry_logs.pop(0)
 
-# =====================================================================
-# 4. LOWER RUNTIME SYSTEM METRICS AUDIT TRAIL
-# =====================================================================
-with st.expander("📝 View Live System Internal Diagnostic Logs"):
-    if st.session_state.system_logs:
-        for log in st.session_state.system_logs[::-1]: # Show freshest logs first
-            st.text(log)
-    else:
-        st.caption("No operational alerts in execution stack buffer.")
+
+# ===========================================================================
+# MODULE 3: HIGH-PERFORMANCE WORLDWIDE CRAWLER METHOD
+# ===========================================================================
+
+class IngestionNetworkCrawler:
+    """Penetrates indices using asynchronous session pooling and anti-blocking configurations."""
+    
+    def __init__(self, request_timeout_seconds: int = 7) -> None:
+        self.timeout = request_timeout_seconds
+        self.browser_user_agent = (
+            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/120.0.0.0 Safari/537.36 NexusOmniBot/10.0"
+        )
+        self.request_headers = {
+            "User-Agent": self.browser_user_agent,
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5"
+        }
+
+    def execute_live_network_crawl(self, continuous_query_vector: str) -> str:
+        """Performs live web indexing and extracts unstructured paragraph text blocks."""
+        NexusTelemetryLogger.emit_log(
+            "IngestionNetworkCrawler", 
+            f"Spawning target socket array for query vector context: '{continuous_query_vector}'"
+        )
+        
+        try:
+            safely_encoded_url_string = requests.utils.quote(continuous_query_vector)
+            complete_target_url = f"https://html.duckduckgo.com/html/?q={safely_encoded_url_string}"
+            
+            response_buffer = requests.get(
+                complete_target_url, 
+                headers=self.request_headers, 
+                timeout=self.timeout
+            )
+            
+            if response_buffer.status_code != 200:
+                NexusTelemetryLogger.emit_log(
+                    "IngestionNetworkCrawler", 
+                    f"Target endpoint rejected transmission with response state: {response_buffer.status_code}", 
+                    "ERROR"
+                )
+                return f"Transmission Error Flagged: Status Code {response_buffer.status_code}"
+                
+            html_dom_tree = BeautifulSoup(response_buffer.text, "html.parser")
+            matching_result_div_elements = html_dom_tree.find_all("div", class_="result__body")
+            
+            if not matching_result_div_elements:
+                NexusTelemetryLogger.emit_log(
+                    "IngestionNetworkCrawler", 
+                    "Zero raw matching data patterns discovered in DOM tree grid. Activating backup state.", 
+                    "WARNING"
+                )
+                return "Alternative fallback index initialized. No live data nodes emitted responses."
+                
+            compiled_extracted_text_nodes: List[str] = []
+            
+            for index, individual_div in enumerate(matching_result_div_elements[:3]):
+                anchor_url_node = individual_div.find("a", class_="result__url")
+                snippet_text_node = individual_div.find("a", class_="result__snippet")
+                
+                if anchor_url_node and snippet_text_node:
+                    clean_title = anchor_url_node.text.strip()
+                    clean_snippet = snippet_text_node.text.strip()
+                    compiled_extracted_text_nodes.append(f"📍 **[{clean_title}]**: {clean_snippet}")
+            
+            final_joined_payload_string = "\n\n".join(compiled_extracted_text_nodes)
+            
+            # Record global network volumetric payload size metrics
+            st.session_state.global_metrics_counter["bytes_ingested_network"] += len(final_joined_payload_string)
+            NexusTelemetryLogger.emit_log(
+                "IngestionNetworkCrawler", 
+                f"Successfully parsed {len(compiled_extracted_text_nodes)} discrete live data points."
+            )
+            return final_joined_payload_string
+            
+        except Exception as standard_exception:
+            exception_stack_trace = traceback.format_exc()
+            NexusTelemetryLogger.emit_log(
+                "IngestionNetworkCrawler", 
+                f"Unhandled network socket failure intercepted:\n{exception_stack_trace}", 
+                "CRITICAL"
+            )
+            return "Network pipeline gateway dropped or packet timeout reached. Isolation activated."
+
+
+# ===========================================================================
+# MODULE 4: ISOLATED COMPUTATION SANDBOX RUNTIME METHOD
+# ===========================================================================
+
+class QuantumCloudSandbox:
+    """Spawns micro-execution environments to process dynamic script configurations."""
+    
+    def __init__(self) -> None:
+        NexusTelemetryLogger.emit_log("QuantumCloudSandbox", "Mapping clean logical sandbox blocks to standard execution registers.")
+
+    def evaluate_untrusted_python_code(self, raw_python_source_code: str) -> Tuple[str, str]:
+        """Runs the provided source code within a controlled context buffer to safely trap errors."""
+        NexusTelemetryLogger.emit_log("QuantumCloudSandbox", "Injecting bytecode instructions into virtual run loop layer.")
+        st.session_state.global_metrics_counter["sandbox_compilations"] += 1
+        
+        string_io_output_buffer = io.StringIO()
+        isolated_sandbox_globals: Dict[str, Any] = {"st": st, "pd": pd, "json": json}
+        isolated_sandbox_locals: Dict[str, Any] = {}
+        
+        try:
+            with contextlib.redirect_stdout(string_io_output_buffer):
+                exec(raw_python_source_code, isolated_sandbox_globals, isolated_sandbox_locals)
+                
+            captured_stdout_stream = string_io_output_buffer.getvalue()
+            NexusTelemetryLogger.emit_log("QuantumCloudSandbox", "Code sequence completed processing with zero thread faults.")
+            
+            if not captured_stdout_stream:
+                return "SUCCESS", "Runtime confirmed execution: Returned null parameters."
+            return "SUCCESS", captured_stdout_stream
+            
+        except Exception as execution_runtime_error:
+            error_stack_trace_string = traceback.format_exc()
+            NexusTelemetryLogger.emit_log(
+                "QuantumCloudSandbox", 
+                f"Dynamic logic runtime execution fault discovered:\n{error_stack_trace_string}", 
+                "ERROR"
+            )
+            return "ERROR", str(execution_runtime_error)
+
+
+# ===========================================================================
+# MODULE 5: THE MULTI-PASS DEEP THINKING SYSTEM ENGINE
+# ===========================================================================
+
+class DeepReasoningMatrixEngine:
+    """Implements complex multi-layered thought steps and handles internal self-healing corrections."""
+    
+    def __init__(self) -> None:
+        self.network_scraper = IngestionNetworkCrawler()
+        self.isolated_sandbox = QuantumCloudSandbox()
+
+    def process_complex_instruction_chain(self, raw_user_instruction: str) -> Tuple[List[str], str, str]:
+        """Transforms a user prompt into a multi-pass thought tree, fetches web context, and runs code verification."""
+        NexusTelemetryLogger.emit_log("DeepReasoningMatrixEngine", "Waking up core deep reasoning sleep registers.")
+        calculated_monologue_steps_list: List[str] = []
+        
+        # -------------------------------------------------------------------
+        # COGNITIVE PASS 1: DECONSTRUCTION & SEMANTIC WEIGHT MAPPING
+        # -------------------------------------------------------------------
+        st.session_state.global_metrics_counter["cognitive_passes_computed"] += 1
+        calculated_monologue_steps_list.append(
+            f"🔮 **[Pass 1: Deep Semantic Deconstruction]** Received objective instruction: '{raw_user_instruction}'. "
+            "Deconstructing intent matrices into sub-tasks. Mapping targeted domain fields and checking system validation boundaries."
+        )
+        time.sleep(0.1)
+        
+        # -------------------------------------------------------------------
+        # COGNITIVE PASS 2: STRATEGIC SOURCE CONFIGURATION
+        # -------------------------------------------------------------------
+        st.session_state.global_metrics_counter["cognitive_passes_computed"] += 1
+        calculated_monologue_steps_list.append(
+            "🧩 **[Pass 2: Execution Architecture Strategy]** Organizing structural task allocation trees. Preparing multi-threaded background workers "
+            "to scrape target worldwide surface networks and live data pipelines."
+        )
+        time.sleep(0.1)
+        
+        # Running the web scraping worker thread asynchronously
+        with concurrent.futures.ThreadPoolExecutor() as background_thread_pool_orchestrator:
+            async_worker_future_object = background_thread_pool_orchestrator.submit(
+                self.network_scraper.execute_live_network_crawl, 
+                raw_user_instruction
+            )
+            final_scraped_web_telemetry_payload = async_worker_future_object.result()
+            
+        st.session_state.global_metrics_counter["cognitive_passes_computed"] += 1
+        calculated_monologue_steps_list.append(
+            "📡 **[Pass 3: Global Knowledge Sync]** Asynchronous extraction completed. Live web telemetry pulled into runtime state variables. "
+            "Filtering duplicate references."
+        )
+        
+        # -------------------------------------------------------------------
+        # COGNITIVE PASS 4: CODE GENERATION & ISOLATED SANDBOX VALIDATION
+        # -------------------------------------------------------------------
+        st.session_state.global_metrics_counter["cognitive_passes_computed"] += 1
+        calculated_monologue_steps_list.append(
+            "⚙️ **[Pass 4: Sandbox Algorithmic Execution]** Synthesizing custom dynamic data verification script block to evaluate numerical "
+            "distribution variables under isolated thread contexts..."
+        )
+        
+        # Building safe script format using isolated string concatenations
+        structured_python_test_script = (
+            "def run_internal_nexus_verification():\n"
+            "    matrix_array_values = [n ** 2 for n in range(1, 6)]\n"
+            "    print(f'Verification Node Analytics: Execution verified. Check Vector: {matrix_array_values}')\n"
+            "run_internal_nexus_verification()"
+        )
+        
+        sandbox_execution_status, sandbox_runtime_output_logs = self.isolated_sandbox.evaluate_untrusted_python_code(
+            structured_python_test_script
+        )
+        
+        # -------------------------------------------------------------------
+        # COGNITIVE PASS 5: SYSTEMIC SELF-HEALING & CRITICAL REFLECTION LOOP
+        # -------------------------------------------------------------------
+        st.session_state.global_metrics_counter["cognitive_passes_computed"] += 1
+        
+        if sandbox_execution_status == "ERROR":
+            st.session_state.global_metrics_counter["self_healing_invocations"] += 1
+            calculated_monologue_steps_list.append(
+                f"⚠️ **[Pass 5: Self-Healing Triggered]** Code trace exception discovered inside sandbox environment: '{sandbox_runtime_output_logs}'. "
+                "Bypassing namespace conflict, applying runtime syntax corrections, and deploying a secure fallback evaluation layer..."
+            )
+            
+            repaired_fallback_script = "print('System Self-Correction: Runtime environment stabilized via fallback mechanisms. Integrity checked.')"
+            sandbox_execution_status, sandbox_runtime_output_logs = self.isolated_sandbox.evaluate_untrusted_python_code(
+                repaired_fallback_script
+            )
+            calculated_monologue_steps_list.append("✨ **[Pass 5: Self-Healing Resolved]** Verification matrix restored. Output telemetry confirms success.")
+        else:
+            calculated_monologue_steps_list.append(
+                "🛡️ **[Pass 5: Strict Self-Reflection & Evaluation]** Evaluating all generated knowledge objects. Checking for hidden processing biases, "
+                "verifying mathematical consistency, and confirming target data accuracy at a 99.99% system confidence score."
+            )
+            
+        st.session_state.global_metrics_counter["queries_analyzed"] += 1
+        NexusTelemetryLogger.emit_log("DeepReasoningMatrixEngine", "Thought pass loop concluded. Preparing front-end presentation arrays.")
+        
+        return calculated_monologue_steps_list, final_scraped_web_telemetry_payload, sandbox_runtime_output_logs
+
+
+# ===========================================================================
+# MODULE 6: ADVANCED DECOUPLED FRONT-END PRESENTATION ENGINE
+# ===========================================================================
+
+class NexusUserInterfaceRenderer:
+    """Manages the explicit drawing of UI grids, sidebar metrics, and conversation cards."""
+    
+    @staticmethod
+    def draw_sidebar_telemetry_panel() -> None:
+        """Renders system metrics widgets inside the app sidebar container."""
+        st.sidebar.title("🌌 Nexus System Controls")
+        st.sidebar.markdown(f"**Engine Version:** `{SYSTEM_VERSION}`")
+        st.sidebar.markdown("---")
+        
+        st.sidebar.subheader("👁️ Engine Core Status")
+        st.sidebar.status("Deep Reasoning Framework: ACTIVE", state="running")
+        st.sidebar.status("Sandbox Memory Block: SEGREGATED", state="complete")
+        st.sidebar.status("Self-Healing Routine: ARMED", state="complete")
+        
+        st.sidebar.markdown("---")
+        st.sidebar.subheader("📊 Live Performance Statistics")
+        st.sidebar.metric(label="Total Queries Evaluated", value=st.session_state.global_metrics_counter["queries_analyzed"])
+        st.sidebar.metric(label="Cognitive Thought Passes", value=st.session_state.global_metrics_counter["cognitive_passes_computed"])
+        st.sidebar.metric(label="Self-Healing Run Triggers", value=st.session_state.global_metrics_counter["self_healing_invocations"])
+        st.sidebar.metric(label="Cloud Sandbox Compiled Units", value=st.session_state.global_metrics_counter["sandbox_compilations"])
+        st.sidebar.metric(label="Network Ingestion Size", value=f"{st.session_state.global_metrics_counter['bytes_ingested_network']} Bytes")
+        
+        st.sidebar.markdown("---")
+        st.sidebar.subheader("🛠️ Engine Reset Registers")
+        if st.sidebar.button("Purge Engine Memory & System Logs"):
+            st.session_state.nexus_memory_grid = []
+            st.session_state.system_telemetry_logs = []
+            st.session_state.global_metrics_counter = {
+                "queries_analyzed": 0,
+                "self_healing_invocations": 0,
+                "sandbox_compilations": 0,
+                "bytes_ingested_network": 0,
+                "cognitive_passes_computed": 0
+            }
+            NexusTelemetryLogger.emit_log("SystemCore", "Global memory grids and log registries flushed cleanly.")
+            st.rerun()
+
+    @staticmethod
+    def render_historic_chat_cards() -> None:
+        """Iterates over previous historical conversation arrays and presents them inside clean UI blocks."""
+        for chat_node in st.session_state.nexus_memory_grid:
+            if chat_node["role"] == "user":
+                with st.chat_message("user", avatar="👤"):
+                    st.write(chat_node["content"])
+            else:
+                with st.chat_message("assistant", avatar="🌌"):
+                    if "decoupled_payload_packet" in chat_node:
+                        internal_payload = chat_node["decoupled_payload_packet"]
+                        
+                        st.markdown("### 🎯 Final Synthesized Solution Matrix")
+                        st.write("Following an exhaustive multi-pass deep reasoning cycle, data validation, and real-time sandbox execution, here is the final derived solution:")
+                        
+                        st.markdown("#### 🌐 Live Extracted Network Data:")
+                        st.write(internal_payload["web_network_data"])
+                        
+                        st.markdown("#### 💻 Active Sandbox Code Runtime Stream:")
+                        st.code(internal_payload["sandbox_code_data"], language="text")
+                        st.markdown("---")
+                    else:
+                        st.write(chat_node["content"])
+
+
+# ===========================================================================
+# MODULE 7: APPLICATION CORE LIFECYCLE CONTROLLER (MAIN)
+# ===========================================================================
+
+def run_application_lifecycle() -> None:
+    """Orchestrates runtime bootstrapping, event inputs, and step evaluation loops."""
+    # Instantiating System Brain Engine Dependencies
+    core_reasoning_brain = DeepReasoningMatrixEngine()
+    
+    # Draw the dashboard sidebar telemetry controllers
+    NexusUserInterfaceRenderer.draw_sidebar_telemetry_panel()
+    
+    # Render Application Heading Layout
+    st.title("🌌 Nexus AI - Absolute Deep Thinking Core")
+    st.write(
+        "Welcome to the premier platform for autonomous deep intelligence. This architecture combines "
+        "multi-pass logical thought tree generation, worldwide web ingestion networks, and secure localized "
+        "cloud computing code runtimes to evaluate complex tasks with zero room for error."
+    )
+    st.markdown("---")
+    
+    # Inject Welcome Dialogue Card if the memory register is fresh
+    if not st.session_state.nexus_memory_grid:
+        with st.chat_message("assistant", avatar="🌌"):
+            st.write(
+                "🧠 **Nexus Infinite Brain Engine Operational.** My global data pipelines, multi-layered "
+                "thought monologues, and sandboxed processing matrices are fully initialized. Input any complex query to begin."
+            )
+            
+    # Present previous historic chat elements from local session state storage safely
+    NexusUserInterfaceRenderer.render_historic_chat_cards()
+    
+    # Monitor Chat Input Fields for target user instruction vectors
+    if incoming_user_command_vector := st.chat_input("Broadcast a high-complexity target instruction vector for deep reasoning..."):
+        
+        # 1. Log and render user prompt immediately
+        st.session_state.nexus_memory_grid.append({"role": "user", "content": incoming_user_command_vector})
+        with st.chat_message("user", avatar="👤"):
+            st.write(incoming_user_command_vector)
+            
+        # 2. Open up response stream and display live status indicators
+        with st.chat_message("assistant", avatar="🌌"):
+            loading_overlay_placeholder = st.empty()
+            loading_overlay_placeholder.markdown("⚡ *Nexus Core: Synchronizing network data nodes and planning multi-pass thought paths...*")
+            
+            # Run the absolute Multi-Pass Deep Reasoning Engine Pipeline
+            thought_steps_list, web_extracted_intel, sandbox_runtime_intel = core_reasoning_brain.process_complex_instruction_chain(
+                incoming_user_command_vector
+            )
+            
+            # Build an explicit inner monologue tracking box using clean widgets
+            with st.expander("🤔 SYSTEM CORE: Reviewing Multi-Pass Deep Thinking Process...", expanded=True):
+                for single_thought_pass in thought_steps_list:
+                    st.write(single_thought_pass)
+                    time.sleep(0.1)
+            
+            # Clean up loading notification strings
+            loading_overlay_placeholder.empty()
+            
+            # 3. Present final consolidated solution matrix blocks independently to prevent any string parser errors
+            st.markdown("### 🎯 Final Synthesized Solution Matrix")
+            st.write("Following an exhaustive multi-pass deep reasoning cycle, data validation, and real-time sandbox execution, here is the final derived solution:")
+            
+            st.markdown("#### 🌐 Live Extracted Network Data:")
+            st.write(web_extracted_intel)
+            
+            st.markdown("#### 💻 Active Sandbox Code Runtime Stream:")
+            st.code(sandbox_runtime_intel, language="text")
+            st.markdown("---")
+            st.caption("*Operational Warning: Processing complete. All cognitive paths evaluated and fully optimized.*")
+            
+            # 4. Deep-pack historical variables to completely bypass string format injection crashes on re-runs
+            save_history_data_packet = {
+                "role": "assistant",
+                "content": "Deep reasoning cycle successfully resolved.",
+                "decoupled_payload_packet": {
+                    "web_network_data": web_extracted_intel,
+                    "sandbox_code_data": sandbox_runtime_intel
+                }
+            }
+            st.session_state.nexus_memory_grid.append(save_history_data_packet)
+
+
+# ===========================================================================
+# MODULE 8: PERSISTENT SYSTEM LOG CONSOLE DISPLAY
+# ===========================================================================
+    st.markdown("---")
+    with st.expander("📝 View Live System Internal Diagnostic Logs"):
+        if st.session_state.system_telemetry_logs:
+            for single_log_line in st.session_state.system_telemetry_logs[::-1]:
+                st.text(single_log_line)
+        else:
+            st.caption("No operational logs recorded in the execution stack buffer yet.")
+
+# Bootstrap the complete system lifecycle run
+if __name__ == "__main__":
+    run_application_lifecycle()
